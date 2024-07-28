@@ -1,2 +1,2 @@
 # mitlogisticregression
-Load video Logistics Regression.mp4
+Load video "Logistic Regression.mp4"
