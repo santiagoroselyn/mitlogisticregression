@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A comprehensive guide to Logistics Regression including its definition, history, importance, concepts, and implementation.">
+  <title>Logistics Regression</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Custom CSS -->
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5; /* Light grey background */
+      font-family: Arial, sans-serif;
+    }
+    .navbar-left {
+      width: 230px;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      padding: 20px;
+      background-color: #1b5a25; /* Green background for navbar */
+      border-right: 1px solid #dee2e6;
+      height: 100vh;
+      overflow-y: auto; /* Allow vertical scrolling */
+      box-shadow: 2px 0 5px rgba(207, 130, 130, 0.1); /* Slight shadow for visual separation */
+    }
+    .navbar-left h4 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+      color: #ffffff; /* White color for the title */
+    }
+    .nav-link {
+      font-size: 1rem;
+      color: #f7f8fa; /* White color for the options */
+      padding: 10px;
+      border-radius: 5px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .nav-link:hover,
+    .nav-link.active {
+      background-color: #fae103;
+      color: #ffffff;
+      font-weight: bold;
+    }
+    .content-area {
+      margin-left: 250px; /* Adjusted space for the navbar */
+      padding: 20px;
+    }
+    .section-title {
+      font-size: 28px;
+      font-weight: bold;
+      color:  #1b5a25; /* Darker text color for section titles */
+      margin-bottom: 10px;
+    }
+    .content-section {
+      margin-bottom: 30px;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .subsection-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: #495057; /* Slightly lighter color for subsection titles */
+      margin-top: 20px;
+    }
+    pre {
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    footer {
+      padding: 15px;
+      background-color: #1b5a25;
+      color: #ffffff;
+      font-size: 0.875rem;
+    }
+    iframe {
+      border: none;
+      width: 100%;
+      height: 400px; /* Increased height for better visibility */
+      display: block;
+      margin: 0 auto;
+    }
+    .button-link {
+            display: inline-block;
+            padding: 10px 20px;
+            width: 100%;
+            font-size: 18px;
+            color: white;
+            background-color: #1b5a25;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .button-link:hover {
+            background-color:#4fec6a;
+        }
+    </style>
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-left">
+      <h4>Logistic Regression</h4>
+      <nav class="nav flex-column">
+        <a class="nav-link" href="#introduction">Introduction</a>
+        <a class="nav-link" href="#concepts">Concepts</a>
+        <a class="nav-link" href="#model">Model</a>
+        <a class="nav-link" href="#algorithmworkflow">Algorithm Workflow</a>
+        <a class="nav-link" href="#coefficients">Coefficients</a>
+        <a class="nav-link" href="#performancemetrics">Performance Metrics</a>
+        <a class="nav-link" href="#strengthandweaknesses">Strength and Weaknesses</a>
+        <a class="nav-link" href="#types">Types</a>
+        <a class="nav-link" href="#applications">Applications</a>
+        <a class="nav-link" href="#examples">Examples</a>
+        <a class="nav-link" href="#toolsandtechnologies">Tools and Technologies</a>
+        <a class="nav-link" href="#comparison">Comparison</a>
+        <a class="nav-link" href="#colab">Colab</a>
+        <a class="nav-link" href="#conclusion">Conclusion</a>
+        <a class="nav-link" href="#references">References</a>
+        <a class="nav-link" href="#activity">My Activitiy Output</a>
+      </nav>
+    </nav>
+    <div class="content-area">
+      <div class="mb-4">
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe class="embed-responsive-item" src="logisticsregression.mp4" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <!-- Content Sections -->
+      <section id="introduction" class="content-section" aria-labelledby="introduction-title">
+        <h2 id="introduction-title" class="section-title">Introduction</h2>
+        <h3 class="subsection-title">Definition</h3>
+        <p>Logistic regression is a supervised machine learning algorithm that accomplishes binary classification tasks by predicting the probability of an outcome, event, or observation. The model delivers a binary or dichotomous outcome limited to two possible outcomes: yes/no, 0/1, or true/false</p>
+        <h3 class="subsection-title">Historical Background and Development</h3>
+        <p>Logistic regression originated in the field of statistics and was developed by statistician David Cox in the early 1950s. It has since become a fundamental tool in various fields, including medicine, social sciences, and machine learning, due to its simplicity and effectiveness in handling binary outcomes.</p>
+        <h3 class="subsection-title">Importance in Data Science and Machine Learning</h3>
+        <p>Logistic regression is widely used in data science and machine learning for tasks such as spam detection, credit scoring, and medical diagnosis. Its importance lies in its ability to provide probabilistic interpretations and its ease of implementation and interpretation.</p>
+     </section>
+
+     <section id="concepts" class="content-section" aria-labelledby="concepts-title">
+        <h2 id="concepts-title" class="section-title">Basic Concepts</h2>
+        <h3 class="subsection-title">Linear vs. Logistic Regression</h3>
+        <p><h5>Linear Regression:</h5>Predicts a continuous outcome by fitting a linear relationship between the dependent and independent variables.</p>
+        <p><h5>Logistic Regression</h5>Predicts a binary outcome by fitting a logistic curve to the data, using the logistic function to map predicted values to probabilities.</p>
+        <p>In a linear regression, the dependent variable is a metric value e.g.salary or electric consumption. In a logistic regression, the dependent variable is a dichotomous variable e.g. 0 or 1, true or false, positive or negative.</p>
+        
+        <h3 class="subsection-title">Sigmoid Function and its Role in Logistic Regression</h3>
+        <p>Logistic regression uses a logistic function called a sigmoid function to map predictions and their probabilities. The sigmoid function refers to an S-shaped curve that converts any real value to a range between 0 and 1.
+        </p>
+        
+        <h3 class="subsection-title">Probability Interpretation and Odds Ratio</h3>
+        <p><h5>Probability Interpretation</h5>The output of logistic regression represents the probability that the given input belongs to a particular class.</p>
+        <p><h5>Odds Ratio</h5>The odds of an event occurring is the ratio of the probability of the event to the probability of it not occurring. Logistic regression coefficients represent the change in the log-odds of the outcome for a one-unit change in the predictor.</p>
+
+      <section id="model" class="content-section" aria-labelledby="model-title">
+        <h2 id="model-title" class="section-title">Model</h2>
+        <h3 class="subsection-title">Regression equation</h3>
+        <p>The logistic regression model predicts the probability 𝑝 that an outcome 𝑦 equals 1 (e.g., success) given a set of predictors 𝑋:</p>
+        <p> <img src='formula.png'></p>
+        <p>where 𝛽 are the model coefficients.</p>
+
+        <h3 class="subsection-title">Logit Function and Logistic Function</h3>
+        <p><h5>Logit Function:</h5>The natural logarithm of the odds of the outcome:</p>
+        <p> <img src='logit p.png'></p>
+        <p><h5>Logistic Function:</h5>The inverse of the logit function, converting log-odds back to probability.</p>
+        
+        <h3 class="subsection-title">Maximum Likelihood Estimation (MLE)</h3>
+        <p>MLE is used to estimate the model parameters by finding the values that maximize the likelihood of the observed data.</p>
+      </section>
+
+      <section id="algorithmworkflow" class="content-section" aria-labelledby="algorithmworkflow-title">
+        <h2 id="algorithmworkflow-title" class="section-title">Algorithm Workflow</h2>
+        <p><h5>Step 1 - Data Preprocessing:</h5>Scale features, handle missing values, and encode categorical variables.</p>
+        <p><img src='step1_1importlibraries.png'></p>
+        <p><img src='step1_2loadthedatasets.png'></p>
+        <p><img src='step1_3inspectthedatasets.png'></p>
+        <p><img src='step1_4handlethemissingvalues.png'></p>
+        <p><h5>Step 2 - Model Training:</h5>Use optimization methods like gradient descent to find the best parameters.</p>
+        <p><img src='step2_5-8modeltraining.png'></p>
+        <p><h5>Step 3 - Prediction and Decision Threshold: </h5>Make predictions and determine the decision threshold for classification (e.g., 0.5).</p>
+        <p><img src='step3_1evaluatethemodel.png'></p>
+        <p><img src='step3_2results.png'></p>
+        <p>From the given datasets, through logistic regression we can predict the possibility of having a disease of a person given the variables age, gender, smoking status and number of diseased from the whole datasets.</p>
+        
+        <section id="coefficients" class="content-section" aria-labelledby="coefficients-title">
+          <h2 id="coefficients-title" class="section-title">Coefficients</h2>
+            <p>The logistic regression coefficients indicate the impact of each feature on the log-odds of the outcome. The coefficients can be interpreted as follows:</p>
+            <ul>
+            <li>Positive Coefficient: An increase in the feature value leads to an increase in the log-odds of success (higher probability of success).</li>
+            <li>Negative Coefficient: An increase in the feature value leads to a decrease in the log-odds of success (lower probability of success).</li>
+          </ul>
+            <p>Let's assume the coefficients are as follows:</p>
+            <p><img src='coefficients.png'></p>
+          <ul>
+            <li>Budget: For each additional dollar increase in the budget, the log-odds of the project being successful increase by 0.03. This means a higher budget slightly increases the probability of success.</li>
+            <li>Duration: For each additional month increase in the project duration, the log-odds of the project being successful increase by 0.5. This means longer projects have a higher probability of success.</li>
+            <li>TeamSize: For each additional team member, the log-odds of the project being successful increase by 0.2. This means larger teams slightly increase the probability of success.</li>
+          </ul>
+             <p><h5>Interpretation</h5></p>
+             <p>From the coefficients, you can see that the duration of the project has the most significant impact on the success of the project, followed by the team size and budget.</p>
+             <p>By understanding the logistic regression coefficients and model evaluation metrics, you can make informed decisions about the factors that most significantly impact project success. 
+              This information can help in planning and allocating resources more effectively to increase the likelihood of project success.</p> 
+        </section>
+
+        <section id="performancemetrics" class="content-section" aria-labelledby="performancemetrics-title">
+          <h2 id="performancemetrics-title" class="section-title">Performance Metrics</h2>
+          <p><h5>Evaluation Metrics</h5></p>
+          <ul>
+            <li>Accuracy: The proportion of correctly classified instances.</li>
+            <li>Precision: The proportion of positive predictions that are actually positive.</li>
+            <li>Recall: The proportion of actual positives that are correctly identified.</li>
+            <li>F1-Score: The harmonic mean of precision and recall.</li>
+          </ul>
+          <p><h5>ROC Curve and AUC</h5></p>
+        <p>ROC: Plots the true positive rate against the false positive rate at various threshold settings.</p>
+        <p>AUC: The area under the ROC curve, representing the model's ability to distinguish between classes.</p>
+          
+          <img src="rocauc.png">
+        </section>
+
+        <section id="strengthandweaknesses" class="content-section" aria-labelledby="strengthandweaknesses-title">
+          <h2 id="strengthandweaknesses-title" class="section-title">Strenght and Weaknesses</h2>
+            <ul>
+            <p><h5>Advantages</h5></p>
+                <li>Simple and interpretable.</li> 
+                <li>Effective for binary classification.</li>
+                <li>Probabilistic interpretation.</li>
+              <p><h5>Limitations</h5></p>
+              <li>Assumes a linear relationship between predictors and the log-odds.</li>
+              <li>Can overfit with many features or small sample sizes.</li>
+            </ul>
+            </section>
+  
+      <section id="types" class="content-section" aria-labelledby="types-title">
+        <h2 id="types-title" class="section-title">Types of Logistic Regression</h2>
+        <h3 class="subsection-title">1. Binary Logistic Regression</h3>
+        <p>This is the most common type of logistic regression used when the response variable has two possible outcomes (e.g., success/failure, yes/no).</p>
+        <p>Example: Predicting whether a project will be successful or not.</p>
+        <h3 class="subsection-title">2. Multinomial Logistic Regression</h3>
+        <p>Used when the response variable has more than two categories that are not ordered.</p>
+        <p>Example: Predicting the category of a project (e.g., high priority, medium priority, low priority).</p>
+        <h3 class="subsection-title">3. Ordinal Logistic Regression:</h3>
+        <p>Used when the response variable has more than two categories with a natural order.</p>
+        <p>Example: Predicting the severity of an issue (e.g., low, medium, high).</p>
+        <h3 class="subsection-title">4. Regularized Logistic Regression</h3>
+        <p>Adds a penalty to the logistic regression to prevent overfitting by discouraging complex models.</p>
+        <p>Example: Predicting customer churn with many features.</p>
+        <h3 class="subsection-title">5. Penalized Logistic Regression</h3>
+        <p>Similar to regularized logistic regression, it applies a penalty to the coefficients to reduce overfitting.</p>
+        <p>Example: Disease prediction models where the number of predictors is high.</p>
+        <h3 class="subsection-title">6. Logistic Regression with Interaction Terms</h3>
+        <p>Includes interaction terms between predictors to capture the combined effect of multiple features.</p>
+        <p>Example: Predicting sales success considering both marketing spend and the number of sales calls.</p>
+        <h3 class="subsection-title">7. Hierarchical Logistic Regression</h3>
+        <p>Used when data is nested or grouped, accounting for the hierarchical structure in the data.</p>
+        <p>Example: Predicting student success where students are nested within schools.</p>
+        <h3 class="subsection-title">8. Firth Logistic Regression</h3>
+        <p>A method to reduce bias in the maximum likelihood estimates, especially useful for small sample sizes or rare events.</p>
+        <p>Example: Predicting rare adverse events in clinical trials.</p>
+      </section>
+
+      <section id="applications" class="content-section" aria-labelledby="applications-title">
+        <h2 id="applications-title" class="section-title">Applications of Logistics Regression</h2>
+        <ul>
+          <li><h5>Project Planning and Risk Management</h5>
+            <p>Predict project success or failure to aid in risk assessment.</p>
+            </li>
+          <li><h5>Quality Assurance</h5>
+           <p>Predict software defects to improve quality control.</p> 
+            </li>
+          <li><h5>Customer Segmentation </h5>
+            <p>Segment customers based on behavior for tailored deliverables.</p>
+          <li><h5>Performance Analysis </h5>
+           <p> Analyze team performance to identify success factors.</p>
+            </li>
+          </ul>
+            <p><h5>Example:</h5></p>
+            <p>Determine the probability of heart attacks</p>
+            <p><img src='heart attack.jpg' size="300"></p>      
+      </section>
+
+      <section id="implementation" class="content-section" aria-labelledby="implementation-title">
+        <h2 id="implementation-title" class="section-title">Implementation Process</h2>
+        <h3 class="subsection-title">Data Collection</h3>
+        <p>Gathers relevant data for analysis.</p>
+        
+        <h3 class="subsection-title">Data Preprocessing</h3>
+        <p>Cleans and prepares data for regression.</p>
+        
+        <h3 class="subsection-title">Applying Linear Regression</h3>
+        <p>Implements using tools like Python or R.</p>
+        
+        <h3 class="subsection-title">Interpreting Results</h3>
+        <p>Analyzes model output to make data-driven decisions.</p>
+      </section>
+
+      <section id="examples" class="content-section" aria-labelledby="examples-title">
+        <h2 id="examples-title" class="section-title">Examples and Case Studies</h2>
+        <p> Here is the step-by-step process for implementing logistic regression to predict employee attrition using Python.</p>
+        <p> We'll use a dataset commonly referred to as the "IBM HR Analytics Employee Attrition & Performance"</p>
+        <p>Download the datasets here: <a href='hrfile.csv'>hrfile.csv</a></p>
+      <pre><code>import pandas as pd
+        import numpy as np
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+        from sklearn.model_selection import train_test_split
+        from sklearn.linear_model import LogisticRegression
+        from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+        
+        # Load dataset
+        # Make sure to replace 'path_to_file.csv' with the actual path to your downloaded dataset file
+        df = pd.read_csv('path_to_file.csv')
+        
+        # Drop irrelevant columns
+        df.drop(['EmployeeCount', 'Over18', 'StandardHours', 'EmployeeNumber'], axis=1, inplace=True)
+        
+        # Encode categorical variables
+        df = pd.get_dummies(df, drop_first=True)
+        
+        # Define features and target variable
+        X = df.drop('Attrition_Yes', axis=1)
+        y = df['Attrition_Yes']
+        
+        # Split the data into training and testing sets
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+        
+        # Initialize and train the logistic regression model
+        logreg = LogisticRegression(max_iter=1000)
+        logreg.fit(X_train, y_train)
+        
+        # Predict on the test set
+        y_pred = logreg.predict(X_test)
+        
+        # Predict probabilities on the test set
+        y_prob = logreg.predict_proba(X_test)[:, 1]  # Probabilities for the positive class (Attrition = Yes)
+        
+        # Evaluate the model
+        print("Accuracy:", accuracy_score(y_test, y_pred))
+        print("\nClassification Report:\n", classification_report(y_test, y_pred))
+        print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+        
+        # Plot confusion matrix
+        sns.heatmap(confusion_matrix(y_test, y_pred), annot=True, fmt='d', cmap='Blues')
+        plt.xlabel('Predicted')
+        plt.ylabel('Actual')
+        plt.title('Confusion Matrix')
+        plt.show()
+        
+        # Print the coefficients of the features
+        coefficients = pd.DataFrame(logreg.coef_[0], X.columns, columns=['Coefficient'])
+        print(coefficients.sort_values(by='Coefficient', ascending=False))
+        
+        # Plot the S-shaped curve for one feature (e.g., Age)
+        # Generate a range of values for Age
+        age_range = np.linspace(X['Age'].min(), X['Age'].max(), 300)
+        
+        # Create a DataFrame with the mean values for all features except Age
+        mean_features = X_train.mean().to_frame().T
+        mean_features = mean_features.loc[np.repeat(mean_features.index.values, len(age_range))]
+        mean_features['Age'] = age_range
+        
+        # Predict probabilities for the age range
+        age_prob = logreg.predict_proba(mean_features)[:, 1]
+        
+        # Plot the S-shaped curve
+        plt.figure(figsize=(10, 6))
+        plt.plot(age_range, age_prob, label='Probability of Attrition')
+        plt.xlabel('Age')
+        plt.ylabel('Probability of Attrition')
+        plt.title('S-shaped Curve for Age and Attrition Probability')
+        plt.legend()
+        plt.grid()
+        plt.show()
+        </code></pre>
+      
+        <p><h5> Here are the results of the logistic regression model's performance evaluation</h5></p>
+        <p><img src='IBM1.png'>
+          <p><img src='IBM2.png'></p>
+          <p><img src='IBM3.png'></p>
+          
+    <section id="toolsandtechnologies" class="content-section" aria-labelledby="toolsandtechnologies-title">
+        <h2 id="toolsandtechnologies" class="section-title">Tools and Technologies</h2>
+        <p><h5>Software Tools</h5></p>
+        <ul><li>scikit-learn (Python): A powerful library for machine learning.</li>
+         <li>glmnet (R): A package for fitting generalized linear models.</li>
+         <h3 class="subsection-title">Example Code Snippets and Demonstrations</h3>
+        <pre><code># Python example using scikit-learn
+          # Python example using scikit-learn
+          from sklearn.model_selection import train_test_split
+          from sklearn.linear_model import LogisticRegression
+          from sklearn.metrics import accuracy_score
+          
+          # Load dataset
+          X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+          
+          # Initialize and train model
+          model = LogisticRegression()
+          model.fit(X_train, y_train)
+          
+          # Make predictions
+          y_pred = model.predict(X_test)
+          
+          # Evaluate model
+          accuracy = accuracy_score(y_test, y_pred)
+          print(f'Accuracy: {accuracy}')</code></pre>
+        </ul>
+      </section>
+
+      <section id="comparison" class="content-section" aria-labelledby="comparison-title">
+        <h2 id="comparison-title" class="section-title">Comparison with Other Algorithms</h2>
+        <ul>
+          <li><h5>SVM</h5></li>
+            <p>Predict project success or failure to aid in risk assessment.</p>
+            <li><h5>Random Forest</h5></li>
+            <p>Handles nonlinear relationships well, but can be less interpretable.</p>
+            <li><h5>Logistic Regression</h5></li>
+            <p>Simple and interpretable, but assumes linearity.</p>
+          </ul>
+      </section>
+
+      <section id="colab" class="content-section" aria-labelledby="colab-title">
+        <h2 id="colab-title" class="section-title">Logistics Regression in Google Colab</h2>
+        <p>Step-by-step guide to implementing logistics regression in Google Colab using Python.</p>
+        <a href="https://colab.research.google.com/github/santiagoroselyn/MIT504/blob/main/Logistics%20Regression%20-%20Sample-Report.ipynb" class="button-link">Click here to see example</a>
+       </section>
+
+      <section id="conclusion" class="content-section" aria-labelledby="conclusion-title">
+        <h2 id="conclusion-title" class="section-title">Conclusion</h2>
+        <p><h5>Summary of Key Points</h5></p>
+        <ul>
+          <li>Logistic regression is a powerful tool for binary classification.</li>
+          <li>It provides a probabilistic interpretation of outcomes.</li>
+          <li>Important in various fields for making informed decisions.</li>
+        </ul><p><h5>Importance of Logistic Regression</h5></p>
+        <ul>
+          <li>Widely used in data science, technology, and project management for its simplicity, interpretability, and effectiveness.</li>
+        </ul>
+        </section>
+
+      <section id="references" class="content-section" aria-labelledby="references-title">
+        <h2 id="references-title" class="section-title">References</h2>
+        <ul>
+          <li>James, G., Witten, D., Hastie, T., & Tibshirani, R. (2013). An Introduction to Statistical Learning with Applications in R. Springer.</li>
+          <li>Hastie, T., Tibshirani, R., & Friedman, J. (2009). The Elements of Statistical Learning: Data Mining, Inference, and Prediction. Springer. </li>
+          <li>Hosmer, D. W., Lemeshow, S., & Sturdivant, R. X. (2013). Applied Logistic Regression. Wiley.</li>
+          <li>Bishop, C. M. (2006). Pattern Recognition and Machine Learning. Springer.</li>
+          <li>Pedregosa, F., Varoquaux, G., Gramfort, A., Michel, V., Thirion, B., Grisel, O., ... & Duchesnay, É. (2011). Scikit-learn: Machine Learning in Python. Journal of Machine Learning Research, 12, 2825-2830.</li>
+          <li>Friedman, J., Hastie, T., & Tibshirani, R. (2010). Regularization Paths for Generalized Linear Models via Coordinate Descent. Journal of Statistical Software, 33(1), 1-22.</li>
+          <li>Cox, D. R. (1958). The Regression Analysis of Binary Sequences. Journal of the Royal Statistical Society: Series B (Methodological), 20(2), 215-242. </li>
+          <li>https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition-dataset</li>
+        </ul>
+      </section>
+
+      <section id="activity" class="content-section" aria-labelledby="activity-title">
+        <h2 id="activity-title" class="section-title">My Activity Outputs</h2>
+        <p>Here's the compilation of my class activity output.</p>
+        <p><a href="https://colab.research.google.com/github/santiagoroselyn/MIT504/blob/main/Ex1_Linear_Regression.ipynb#scrollTo=qidaUgwMlrSz" class="button-link">Ex1 - Linear Regression</a></p>
+        <p><a href="https://colab.research.google.com/github/santiagoroselyn/MIT504/blob/main/Ex2_Linear_Regression.ipynb#scrollTo=27Nf55sC4kVj" class="button-link">Ex2 - Multiple Linear Regression</a></p>
+        <p><a href="https://colab.research.google.com/github/santiagoroselyn/MIT504/blob/main/Logistics%20Regression%20-%20Sample-Report.ipynb" class="button-link">Ex3 - Time Series Analysis with ARIMA Model</a></p>
+        <p><a href="https://colab.research.google.com/github/santiagoroselyn/MIT504/blob/main/Activity%202%3A%20Time%20Series%20Analysis%20-%20Renewable%20Energy%20Consumption%20in%20the%20US.ipynb#scrollTo=tNH8D8EgATgM&line=1&uniqifier=1" class="button-link">Activity - 
+          Time Series Analysis with ARIMA Model - Renewable Energy Consumption in the US</a></p>
+      </section>
+
+      <footer class="text-center mt-5">
+        <p>&copy; 2024 Rose Lyn T. Santiago. All rights reserved.</p>
+      </footer>
+    </div>
+  </header>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Add event listeners for navigation links to highlight active sections
+      const navLinks = document.querySelectorAll('.navbar-left .nav-link');
+      const sections = document.querySelectorAll('.content-section');
+
+      window.addEventListener('scroll', function () {
+        let index = sections.length;
+
+        while (--index && window.scrollY + 50 < sections[index].offsetTop) {}
+
+        navLinks.forEach((link) => link.classList.remove('active'));
+        navLinks[index].classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
